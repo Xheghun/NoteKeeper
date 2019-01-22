@@ -18,6 +18,10 @@ public final class NoteInfo implements Parcelable {
         mText = text;
     }
 
+    public NoteInfo() {
+
+    }
+
     private NoteInfo(Parcel source) {
         mCourse = source.readParcelable(CourseInfo.class.getClassLoader());
         mTitle = source.readString();
