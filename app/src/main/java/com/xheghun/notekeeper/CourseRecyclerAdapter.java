@@ -1,7 +1,6 @@
 package com.xheghun.notekeeper;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,30 +10,33 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * Created by Xheghun.
+ */
+
 public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAdapter.ViewHolder> {
+
     private final Context mContext;
-
-    private final LayoutInflater layoutInflater;
     private final List<CourseInfo> mCourses;
+    private final LayoutInflater mLayoutInflater;
 
-    CourseRecyclerAdapter(Context mContext, List<CourseInfo> mNotes) {
-        this.mContext = mContext;
-        layoutInflater = LayoutInflater.from(mContext);
-        this.mCourses = mNotes;
+    public CourseRecyclerAdapter(Context context, List<CourseInfo> courses) {
+        mContext = context;
+        mCourses = courses;
+        mLayoutInflater = LayoutInflater.from(mContext);
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.item_note_list, parent, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = mLayoutInflater.inflate(R.layout.item_course_list, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CourseInfo course = mCourses.get(holder.getAdapterPosition());
-        holder.textCourse.setText(course.getTitle());
-        holder.mCurrentPosition = holder.getAdapterPosition();
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        CourseInfo course = mCourses.get(position);
+        holder.mTextCourse.setText(course.getTitle());
+        holder.mCurrentPosition = position;
     }
 
     @Override
@@ -42,22 +44,30 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
         return mCourses.size();
     }
 
-
-    //InnerClass
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView textCourse;
+
+        public final TextView mTextCourse;
         public int mCurrentPosition;
 
-        public ViewHolder(View view) {
-            super(view);
-            textCourse = view.findViewById(R.id.text_title);
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mTextCourse = itemView.findViewById(R.id.course_title);
 
-            view.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    Snackbar.make(view, mCourses.get(mCurrentPosition).getTitle(), Snackbar.LENGTH_SHORT).show();
+                public void onClick(View v) {
+                    Snackbar.make(v, mCourses.get(mCurrentPosition).getTitle(),
+                            Snackbar.LENGTH_LONG).show();
+
                 }
             });
         }
     }
 }
+
+
+
+
+
+
+

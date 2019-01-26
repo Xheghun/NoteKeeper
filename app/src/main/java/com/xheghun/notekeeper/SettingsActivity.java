@@ -1,5 +1,6 @@
 package com.xheghun.notekeeper;
 
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +35,6 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
-
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -192,7 +192,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("user_display_name"));
             bindPreferenceSummaryToValue(findPreference("user_email_address"));
-            bindPreferenceSummaryToValue(findPreference("user_fav_social"));
+            bindPreferenceSummaryToValue(findPreference("user_favorite_social"));
         }
 
         @Override

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by xheghun
+ * Created by Xheghun.
  */
 
 public class DataManager {
