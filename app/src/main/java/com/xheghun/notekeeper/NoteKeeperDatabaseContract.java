@@ -7,8 +7,7 @@ import android.provider.BaseColumns;
  */
 
 public final class NoteKeeperDatabaseContract {
-    private NoteKeeperDatabaseContract() {
-    } // make non-creatable
+    private NoteKeeperDatabaseContract() {} // make non-creatable
 
     public static final class CourseInfoEntry implements BaseColumns {
         public static final String TABLE_NAME = "course_info";
@@ -56,6 +55,7 @@ public final class NoteKeeperDatabaseContract {
                         COLUMN_NOTE_TEXT + " TEXT, " +
                         COLUMN_COURSE_ID + " TEXT NOT NULL)";
     }
+
 
 
 }

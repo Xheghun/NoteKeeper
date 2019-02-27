@@ -2,29 +2,26 @@ package com.xheghun.notekeeper;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
-
 /**
  * Created by Xheghun.
  */
 
 public final class NoteKeeperProviderContract {
+    private NoteKeeperProviderContract(){}
     public static final String AUTHORITY = "com.xheghun.notekeeper.provider";
     public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
-    private NoteKeeperProviderContract() {
-    }
-
     protected interface CoursesIdColumns {
-        String COLUMN_COURSE_ID = "course_id";
+        public static final String COLUMN_COURSE_ID = "course_id";
     }
 
     protected interface CoursesColumns {
-        String COLUMN_COURSE_TITLE = "course_title";
+        public static final String COLUMN_COURSE_TITLE = "course_title";
     }
 
     protected interface NotesColumns {
-        String COLUMN_NOTE_TITLE = "note_title";
-        String COLUMN_NOTE_TEXT = "note_text";
+        public static final String COLUMN_NOTE_TITLE = "note_title";
+        public static final String COLUMN_NOTE_TEXT = "note_text";
     }
 
     public static final class Courses implements BaseColumns, CoursesColumns, CoursesIdColumns {

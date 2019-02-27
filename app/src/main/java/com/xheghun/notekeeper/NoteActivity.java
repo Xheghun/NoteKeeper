@@ -1,6 +1,8 @@
 package com.xheghun.notekeeper;
 
+import android.app.AlarmManager;
 import android.app.LoaderManager;
+import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -11,12 +13,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
@@ -29,6 +35,7 @@ public class NoteActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final int LOADER_NOTES = 0;
     public static final int LOADER_COURSES = 1;
+    private static final String NOTE_URI = "com.xheghun.notekeeper:NOTE_URI";
     private final String TAG = getClass().getSimpleName();
     public static final String NOTE_ID = "com.xheghun.notekeeper.NOTE_ID";
     public static final String ORIGINAL_NOTE_COURSE_ID = "com.xheghun.notekeeper.ORIGINAL_NOTE_COURSE_ID";
@@ -86,6 +93,8 @@ public class NoteActivity extends AppCompatActivity
             saveOriginalNoteValues();
         } else {
             restoreOriginalNoteValues(savedInstanceState);
+            String stringNoteUri = savedInstanceState.getString(NOTE_URI);
+            mNoteUri = Uri.parse(stringNoteUri);
         }
 
         mTextNoteTitle = findViewById(R.id.text_note_title);
@@ -183,6 +192,8 @@ public class NoteActivity extends AppCompatActivity
         outState.putString(ORIGINAL_NOTE_COURSE_ID, mOriginalNoteCourseId);
         outState.putString(ORIGINAL_NOTE_TITLE, mOriginalNoteTitle);
         outState.putString(ORIGINAL_NOTE_TEXT, mOriginalNoteText);
+
+        outState.putString(NOTE_URI,mNoteUri.toString());
     }
 
     private void saveNote() {
@@ -220,6 +231,8 @@ public class NoteActivity extends AppCompatActivity
         mSpinnerCourses.setSelection(courseIndex);
         mTextNoteTitle.setText(noteTitle);
         mTextNoteText.setText(noteText);
+
+        CourseEventBroadcastHelper.sendEventBroadcast(this,courseId,"editing note....");
     }
 
     private int getIndexOfCourseId(String courseId) {
@@ -253,13 +266,63 @@ public class NoteActivity extends AppCompatActivity
     }
 
     private void createNewNote() {
+        AsyncTask<ContentValues,Integer,Uri> task = new AsyncTask<ContentValues, Integer, Uri>() {
+           private ProgressBar mProgressBar;
+
+            @Override
+            protected void onPreExecute() {
+                mProgressBar = findViewById(R.id.progress_bar);
+                mProgressBar.setVisibility(View.VISIBLE);
+                mProgressBar.setProgress(1);
+            }
+
+            @Override
+            protected Uri doInBackground(ContentValues... contentValues) {
+                Log.d(TAG,"doInBackground - thread: "+Thread.currentThread().getId());
+                ContentValues insertValues = contentValues[0];
+                Uri rowUri = getContentResolver().insert(Notes.CONTENT_URI, insertValues);
+                simulateLongRunningWork();//simulate slow data work
+                publishProgress(2);
+                simulateLongRunningWork();
+                publishProgress(3);
+                return rowUri;
+            }
+
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                int progressValue = values[0];
+                mProgressBar.setProgress(progressValue);
+            }
+
+            @Override
+            protected void onPostExecute(Uri uri) {
+                Log.d(TAG,"onPostExecute - thread: "+Thread.currentThread().getId());
+                mNoteUri = uri;
+                displaySnackBar(mNoteUri.toString());
+                mProgressBar.setVisibility(View.GONE);
+            }
+        };
+
         ContentValues values = new ContentValues();
         values.put(Notes.COLUMN_COURSE_ID, "");
         values.put(Notes.COLUMN_NOTE_TITLE, "");
         values.put(Notes.COLUMN_NOTE_TEXT, "");
 
-        mNoteUri = getContentResolver().insert(Notes.CONTENT_URI, values);
+       Log.d(TAG,"Call to execute - thread: "+ Thread.currentThread().getId());
+       task.execute(values);
+    }
 
+    private void simulateLongRunningWork() {
+        try {
+            Thread.sleep(2000);
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void displaySnackBar(String string) {
+        View view = findViewById(R.id.activity_note);
+        Snackbar.make(view,string,Snackbar.LENGTH_SHORT);
     }
 
     @Override
@@ -296,7 +359,21 @@ public class NoteActivity extends AppCompatActivity
         String noteTitle = mTextNoteTitle.getText().toString();
         String noteText = mTextNoteText.getText().toString();
         int noteId = (int) ContentUris.parseId(mNoteUri);
-        NoteReminderNotification.notify(this, noteTitle, noteText, noteId);
+        Intent intent = new Intent(this,NoteReminderReceiver.class);
+        intent.putExtra(NoteReminderReceiver.EXTRA_NOTE_TITLE, noteTitle);
+        intent.putExtra(NoteReminderReceiver.EXTRA_NOTE_TEXT, noteText);
+        intent.putExtra(NoteReminderReceiver.EXTRA_NOTE_ID, noteId);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager =(AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Long currentTimeInMilliseconds = SystemClock.elapsedRealtime();
+        long ONE_HOUR = 60 * 60 * 1000;
+        long TEN = 10 * 1000;
+        long alarmTime = currentTimeInMilliseconds + TEN;
+        assert alarmManager != null;
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, alarmTime, pendingIntent);
     }
 
     @Override
@@ -401,15 +478,3 @@ public class NoteActivity extends AppCompatActivity
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

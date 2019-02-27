@@ -1,12 +1,13 @@
 package com.xheghun.notekeeper;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.List;
 /**
- * Created by Xheghun.
+ * Created by Jim.
  */
 
 public final class CourseInfo implements Parcelable {

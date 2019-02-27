@@ -30,10 +30,10 @@ public class NoteReminderNotification {
      * Shows the notification, or updates a previously shown notification of
      * this type, with the given parameters.
      * <p>
-     * TODO: Customize this method's arguments to present relevant content in
+     *
      * the notification.
      * <p>
-     * TODO: Customize the contents of this method to tweak the behavior and
+     *
      * presentation of note reminder notifications. Make
      * sure to follow the
      * <a href="https://developer.android.com/design/patterns/notifications.html">
@@ -48,8 +48,11 @@ public class NoteReminderNotification {
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
-        // TODO: Remove this if your notification has no relevant thumbnail.
-        final Bitmap picture = BitmapFactory.decodeResource(res, R.mipmap.ic_launcher_round);
+
+        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.note_icon);
+
+        Intent backupServiceIntent = new Intent(context,NoteBackupService.class);
+        backupServiceIntent.putExtra(NoteBackupService.EXTRA_COURSE_ID,NoteBackup.ALL_COURSES);
 
         Intent noteActivityIntent = new Intent(context, NoteActivity.class);
         noteActivityIntent.putExtra(NoteActivity.NOTE_ID, noteId);
@@ -91,7 +94,6 @@ public class NoteReminderNotification {
                 // should set the relevant time information using the setWhen
                 // method below. If this call is omitted, the notification's
                 // timestamp will by set to the time at which it was shown.
-                // TODO: Call setWhen if this notification relates to a past or
                 // upcoming event. The sole argument to this method should be
                 // the notification timestamp in milliseconds.
                 //.setWhen(...)
@@ -112,6 +114,12 @@ public class NoteReminderNotification {
                                 new Intent(context, MainActivity.class),
                                 PendingIntent.FLAG_UPDATE_CURRENT
                         ))
+                .addAction(0,"Backup Notes",
+                        PendingIntent.getService(
+                                context,
+                                0,
+                                backupServiceIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT))
 
                 // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(true);

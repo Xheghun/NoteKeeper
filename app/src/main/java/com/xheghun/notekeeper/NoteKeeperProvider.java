@@ -18,14 +18,17 @@ import com.xheghun.notekeeper.NoteKeeperProviderContract.Notes;
 
 public class NoteKeeperProvider extends ContentProvider {
 
+    private static final String MIME_VENDOR_TYPE = "vnd." + NoteKeeperProviderContract.AUTHORITY + ".";
+    private NoteKeeperOpenHelper mDbOpenHelper;
+
+    private static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
     public static final int COURSES = 0;
     public static final int NOTES = 1;
     public static final int NOTES_EXPANDED = 2;
     public static final int NOTES_ROW = 3;
-    private static final String MIME_VENDOR_TYPE = "vnd." + NoteKeeperProviderContract.AUTHORITY + ".";
     private static final int COURSES_ROW = 4;
     private static final int NOTES_EXPANDED_ROW = 5;
-    private static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         sUriMatcher.addURI(NoteKeeperProviderContract.AUTHORITY, Courses.PATH, COURSES);
@@ -35,8 +38,6 @@ public class NoteKeeperProvider extends ContentProvider {
         sUriMatcher.addURI(NoteKeeperProviderContract.AUTHORITY, Notes.PATH + "/#", NOTES_ROW);
         sUriMatcher.addURI(NoteKeeperProviderContract.AUTHORITY, Notes.PATH_EXPANDED + "/#", NOTES_EXPANDED_ROW);
     }
-
-    private NoteKeeperOpenHelper mDbOpenHelper;
 
     public NoteKeeperProvider() {
     }
@@ -50,7 +51,7 @@ public class NoteKeeperProvider extends ContentProvider {
         SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
 
         int uriMatch = sUriMatcher.match(uri);
-        switch (uriMatch) {
+        switch(uriMatch) {
             case COURSES:
                 nRows = db.delete(CourseInfoEntry.TABLE_NAME, selection, selectionArgs);
                 break;
@@ -83,9 +84,9 @@ public class NoteKeeperProvider extends ContentProvider {
     public String getType(Uri uri) {
         String mimeType = null;
         int uriMatch = sUriMatcher.match(uri);
-        switch (uriMatch) {
+        switch(uriMatch){
             case COURSES:
-                // xheghun.android.cursor.dir/vnd.com.xheghun.notekeeper.provider.courses
+                // vnd.android.cursor.dir/vnd.com.xheghun.notekeeper.provider.courses
                 mimeType = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" +
                         MIME_VENDOR_TYPE + Courses.PATH;
                 break;
@@ -114,7 +115,7 @@ public class NoteKeeperProvider extends ContentProvider {
         long rowId = -1;
         Uri rowUri = null;
         int uriMatch = sUriMatcher.match(uri);
-        switch (uriMatch) {
+        switch(uriMatch) {
             case NOTES:
                 rowId = db.insert(NoteInfoEntry.TABLE_NAME, null, values);
                 // content://com.xheghun.notekeeper.provider/notes/1
@@ -148,7 +149,7 @@ public class NoteKeeperProvider extends ContentProvider {
         SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
 
         int uriMatch = sUriMatcher.match(uri);
-        switch (uriMatch) {
+        switch(uriMatch) {
             case COURSES:
                 cursor = db.query(CourseInfoEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -190,7 +191,7 @@ public class NoteKeeperProvider extends ContentProvider {
                                       String[] selectionArgs, String sortOrder) {
 
         String[] columns = new String[projection.length];
-        for (int idx = 0; idx < projection.length; idx++) {
+        for(int idx=0; idx < projection.length; idx++) {
             columns[idx] = projection[idx].equals(BaseColumns._ID) ||
                     projection[idx].equals(CoursesIdColumns.COLUMN_COURSE_ID) ?
                     NoteInfoEntry.getQName(projection[idx]) : projection[idx];
@@ -215,7 +216,7 @@ public class NoteKeeperProvider extends ContentProvider {
         SQLiteDatabase db = mDbOpenHelper.getReadableDatabase();
 
         int uriMatch = sUriMatcher.match(uri);
-        switch (uriMatch) {
+        switch(uriMatch) {
             case COURSES:
                 nRows = db.update(CourseInfoEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;

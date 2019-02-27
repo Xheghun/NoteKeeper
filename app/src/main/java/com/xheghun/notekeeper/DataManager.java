@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Xheghun.
+ * Created by Jim.
  */
 
 public class DataManager {
@@ -56,7 +56,7 @@ public class DataManager {
 
         DataManager dm = getInstance();
         dm.mNotes.clear();
-        while (cursor.moveToNext()) {
+        while(cursor.moveToNext()) {
             String noteTitle = cursor.getString(noteTitlePos);
             String noteText = cursor.getString(noteTextPos);
             String courseId = cursor.getString(courseIdPos);
@@ -75,7 +75,7 @@ public class DataManager {
 
         DataManager dm = getInstance();
         dm.mCourses.clear();
-        while (cursor.moveToNext()) {
+        while(cursor.moveToNext()) {
             String courseId = cursor.getString(courseIdPos);
             String courseTitle = cursor.getString(courseTitlePos);
             CourseInfo course = new CourseInfo(courseId, courseTitle, null);

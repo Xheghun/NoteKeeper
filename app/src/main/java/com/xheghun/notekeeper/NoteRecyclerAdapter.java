@@ -33,7 +33,7 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
     }
 
     private void populateColumnPositions() {
-        if (mCursor == null)
+        if(mCursor == null)
             return;
         // Get column indexes from mCursor
         mCoursePos = mCursor.getColumnIndex(CourseInfoEntry.COLUMN_COURSE_TITLE);
@@ -42,7 +42,7 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
     }
 
     public void changeCursor(Cursor cursor) {
-        if (mCursor != null)
+        if(mCursor != null)
             mCursor.close();
         mCursor = cursor;
         populateColumnPositions();
@@ -79,8 +79,8 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mTextCourse = itemView.findViewById(R.id.text_course);
-            mTextTitle = itemView.findViewById(R.id.text_title);
+            mTextCourse = (TextView) itemView.findViewById(R.id.text_course);
+            mTextTitle = (TextView) itemView.findViewById(R.id.text_title);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

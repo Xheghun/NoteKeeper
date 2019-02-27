@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Created by Xheghun.
+ * Created by Jim.
  */
 
 public class DatabaseDataWorker {
@@ -43,7 +43,7 @@ public class DatabaseDataWorker {
         long newRowId = mDb.insert(NoteKeeperDatabaseContract.CourseInfoEntry.TABLE_NAME, null, values);
     }
 
-    private void insertNote(String courseId, String title, String text) {
+     private void insertNote(String courseId, String title, String text) {
         ContentValues values = new ContentValues();
         values.put(NoteKeeperDatabaseContract.NoteInfoEntry.COLUMN_COURSE_ID, courseId);
         values.put(NoteKeeperDatabaseContract.NoteInfoEntry.COLUMN_NOTE_TITLE, title);
