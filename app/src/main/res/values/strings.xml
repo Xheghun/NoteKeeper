@@ -6,8 +6,10 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="note_title_hint">Note title</string>
     <string name="note_text_hint">Note text</string>
+
     <string name="nav_share_message">Don\'t you think you\'ve shared enough</string>
     <string name="nav_send_message">Send</string>
     <string name="title_activity_settings">Settings</string>
@@ -84,7 +86,7 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="pref_title_email_address">Email address</string>
-    <string name="pref_default_email_address">yourname@yourhost.com</string>
+    <string name="pref_default_email_address" translatable="false">yourname@yourhost.com</string>
     <string name="pref_title_favorite_social">Favorite social network</string>
     <string-array name="pref_entries_favorite_social">
         <item>Google+</item>
@@ -96,11 +98,12 @@
         <item>http://facebook.com</item>
         <item>http://twitter.com</item>
     </string-array>
-    <string name="pref_default_favorite_social">http://plus.google.com</string>
+    <string name="pref_default_favorite_social" translatable="false">http://plus.google.com</string>
 
-    <string name="note_reminder_notification_title_template">Note reminder: %1$s</string>
+    <string name="note_reminder_notification_title_template" translatable="false">Note reminder: %1$s</string>
 
-    <string name="note_reminder_notification_placeholder_text_template">You said %1$s and lorem
+    <!-- TODO: remove this placeholder text -->
+    <string name="note_reminder_notification_placeholder_text_template" translatable="false">You said %1$s and lorem
         ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit
         vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
         Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
@@ -108,8 +111,14 @@
         viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
         tortor.
     </string>
-    <string name="upload_notes">Upload Notes</string>
-    <string name="backup_notes">Backup notes</string>
+    <string name="create_new_note">Create new note</string>
+    <string name="app_user_notekeeper_app" translatable="false">app\.user@notekeeper\.app</string>
+    <string name="notekeeper" translatable="false">NoteKeeper</string>
+    <string name="set_reminder">Set reminder</string>
+    <string name="send_as_email">Send as email</string>
+    <string name="next">Next</string>
+    <string name="cancel">Cancel</string>
+    <string name="textview">TextView</string>
 </resources>
 
 

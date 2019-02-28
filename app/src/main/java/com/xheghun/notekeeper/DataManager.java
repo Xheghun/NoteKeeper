@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Jim.
+ * Created by Xheghun.
  */
 
 public class DataManager {
@@ -86,11 +86,11 @@ public class DataManager {
     }
 
     public String getCurrentUserName() {
-        return "Jim Wilson";
+        return "Rhufhai Xheghun";
     }
 
     public String getCurrentUserEmail() {
-        return "jimw@jwhh.com";
+        return "ysenruf@gmail.com";
     }
 
     public List<NoteInfo> getNotes() {
@@ -150,12 +150,12 @@ public class DataManager {
     }
 
     //region Initialization code
-
+/*
     private void initializeCourses() {
-        mCourses.add(initializeCourse1());
-        mCourses.add(initializeCourse2());
-        mCourses.add(initializeCourse3());
-        mCourses.add(initializeCourse4());
+//        mCourses.add(initializeCourse1());
+//        mCourses.add(initializeCourse2());
+//        mCourses.add(initializeCourse3());
+//        mCourses.add(initializeCourse4());
     }
 
     public void initializeExampleNotes() {
@@ -206,8 +206,6 @@ public class DataManager {
         modules.add(new ModuleInfo("android_intents_m01", "Android Late Binding and Intents"));
         modules.add(new ModuleInfo("android_intents_m02", "Component activation with intents"));
         modules.add(new ModuleInfo("android_intents_m03", "Delegation and Callbacks through PendingIntents"));
-        modules.add(new ModuleInfo("android_intents_m04", "IntentFilter data tests"));
-        modules.add(new ModuleInfo("android_intents_m05", "Working with Platform Features Through Intents"));
 
         return new CourseInfo("android_intents", "Android Programming with Intents", modules);
     }
@@ -216,8 +214,6 @@ public class DataManager {
         List<ModuleInfo> modules = new ArrayList<>();
         modules.add(new ModuleInfo("android_async_m01", "Challenges to a responsive user experience"));
         modules.add(new ModuleInfo("android_async_m02", "Implementing long-running operations as a service"));
-        modules.add(new ModuleInfo("android_async_m03", "Service lifecycle management"));
-        modules.add(new ModuleInfo("android_async_m04", "Interacting with services"));
 
         return new CourseInfo("android_async", "Android Async Programming and Services", modules);
     }
@@ -227,16 +223,6 @@ public class DataManager {
         modules.add(new ModuleInfo("java_lang_m01", "Introduction and Setting up Your Environment"));
         modules.add(new ModuleInfo("java_lang_m02", "Creating a Simple App"));
         modules.add(new ModuleInfo("java_lang_m03", "Variables, Data Types, and Math Operators"));
-        modules.add(new ModuleInfo("java_lang_m04", "Conditional Logic, Looping, and Arrays"));
-        modules.add(new ModuleInfo("java_lang_m05", "Representing Complex Types with Classes"));
-        modules.add(new ModuleInfo("java_lang_m06", "Class Initializers and Constructors"));
-        modules.add(new ModuleInfo("java_lang_m07", "A Closer Look at Parameters"));
-        modules.add(new ModuleInfo("java_lang_m08", "Class Inheritance"));
-        modules.add(new ModuleInfo("java_lang_m09", "More About Data Types"));
-        modules.add(new ModuleInfo("java_lang_m10", "Exceptions and Error Handling"));
-        modules.add(new ModuleInfo("java_lang_m11", "Working with Packages"));
-        modules.add(new ModuleInfo("java_lang_m12", "Creating Abstract Relationships with Interfaces"));
-        modules.add(new ModuleInfo("java_lang_m13", "Static Members, Nested Types, and Anonymous Classes"));
 
         return new CourseInfo("java_lang", "Java Fundamentals: The Java Language", modules);
     }
@@ -246,16 +232,9 @@ public class DataManager {
         modules.add(new ModuleInfo("java_core_m01", "Introduction"));
         modules.add(new ModuleInfo("java_core_m02", "Input and Output with Streams and Files"));
         modules.add(new ModuleInfo("java_core_m03", "String Formatting and Regular Expressions"));
-        modules.add(new ModuleInfo("java_core_m04", "Working with Collections"));
-        modules.add(new ModuleInfo("java_core_m05", "Controlling App Execution and Environment"));
-        modules.add(new ModuleInfo("java_core_m06", "Capturing Application Activity with the Java Log System"));
-        modules.add(new ModuleInfo("java_core_m07", "Multithreading and Concurrency"));
-        modules.add(new ModuleInfo("java_core_m08", "Runtime Type Information and Reflection"));
-        modules.add(new ModuleInfo("java_core_m09", "Adding Type Metadata with Annotations"));
-        modules.add(new ModuleInfo("java_core_m10", "Persisting Objects with Serialization"));
 
         return new CourseInfo("java_core", "Java Fundamentals: The Core Platform", modules);
-    }
+    }*/
 
     public int createNewNote(CourseInfo course, String noteTitle, String noteText) {
         int index = createNewNote();

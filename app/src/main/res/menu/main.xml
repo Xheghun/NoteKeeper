@@ -4,15 +4,14 @@
     <item
         android:id="@+id/action_backup_notes"
         android:orderInCategory="100"
-        android:title="@string/backup_notes"/>
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="101"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        android:title="Backup notes" />
     <item
         android:id="@+id/action_upload_notes"
+        android:orderInCategory="101"
+        android:title="Upload notes" />
+    <item
+        android:id="@+id/action_settings"
         android:orderInCategory="102"
-        android:title="@string/upload_notes"
-        />
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
 </menu>

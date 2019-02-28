@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Created by Jim.
+ * Created by Xheghun.
  */
 
 public class DatabaseDataWorker {
@@ -15,24 +15,17 @@ public class DatabaseDataWorker {
     }
 
     public void insertCourses() {
-        insertCourse("java_lang", "Java Fundamentals: The Java Language");
-        insertCourse("android_intents", "Android Programming with Intents");
-        insertCourse("java_core", "Java Fundamentals: The Core Platform");
-        insertCourse("android_async", "Android Async Programming and Services");
+        insertCourse("study", "Study");
+        insertCourse("work", "Work");
+        insertCourse("personal_development", "Personal Development");
+        insertCourse("un_categorized", "Un-categorized");
     }
 
     public void insertSampleNotes() {
-        insertNote("android_intents", "Dynamic intent resolution", "Wow, intents allow components to be resolved at runtime");
-        insertNote("java_lang", "Parameters", "Leverage variable-length parameter lists?");
-
-        insertNote("android_intents", "Delegating intents", "PendingIntents are powerful; they delegate much more than just a component invocation");
-        insertNote("java_core", "Compiler options", "The -jar option isn't compatible with with the -cp option");
-
-        insertNote("java_core", "Serialization", "Remember to include SerialVersionUID to assure version compatibility");
-        insertNote("android_async", "Service default threads", "Did you know that by default an Android Service will tie up the UI thread?");
-
-        insertNote("java_lang", "Anonymous classes", "Anonymous classes simplify implementing one-use types");
-        insertNote("android_async", "Long running operations", "Foreground Services can be tied to a notification icon");
+        insertNote("study", "Sample Study Title", "Sample Study Text");
+        insertNote("work", "Sample Work Title", "Sample Work Text");
+        insertNote("personal_development", "Sample Personal Dev Title", "Sample Personal Dev Text");
+        insertNote("un_categorized", "Sample Un-categorized Title", "Nothing Here!");
     }
 
     private void insertCourse(String courseId, String title) {

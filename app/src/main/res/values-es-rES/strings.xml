@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NoteKeeper</string>
+    <string name="note_text_hint">Texto de la nota</string>
+    <string name="note_title_hint">Título de la nota</string>
+    <string name="title_activity_note">Editar Nota</string>
+    <string name="action_settings">ajustes</string>
+    <string name="title_activity_main">NoteKeeper</string>
+    <string name="navigation_drawer_open">cajon de navegacion abierto</string>
+    <string name="navigation_drawer_close">cerrar el cajon de navegacion</string>
+    <string name="nav_share_message">¿No crees que has compartido lo suficiente_</string>
+    <string name="nav_send_message">enviar</string>
+    <string name="title_activity_settings">ajustes</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_title_social_recommendations">bilitar recomendaciones sociales</string>
+    <string name="pref_description_social_recommendations">recomendaciones para personas a contactar</string>
+    <string name="pref_title_display_name">nombre para mostrar</string>
+    <string name="pref_default_display_name">tu nombre</string>
+    <string name="pref_title_add_friends_to_messages">agregar amigos al mensaje</string>
+    <string name="pref_header_data_sync">datos y  sincronización</string>
+    <string name="pref_title_sync_frequency">frecuencia de sincronization</string>
+    <string name="pref_title_system_sync_settings">"configuración de sincronizacion ´del sistema "</string>
+    <string name="pref_header_notifications">notificaciones</string>
+    <string name="pref_title_new_message_notifications">"notificaciones de mensajes muevos "</string>
+    <string name="pref_title_ringtone">tono de llamada</string>
+    <string name="pref_ringtone_silent">Silencio</string>
+    <string name="pref_title_vibrate">Vibrar</string>
+    <string name="pref_title_email_address">"Direccion de correo electr{onico "</string>
+    <string name="pref_title_favorite_social">Red social favorita</string>
+    <string name="create_new_note">Crear nueva nota</string>
+    <string name="set_reminder">establecer recordatorio</string>
+    <string name="send_as_email">enviar como correo</string>
+    <string name="next">siguiente</string>
+    <string name="cancel">Cancelar</string>
+</resources>

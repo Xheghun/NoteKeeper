@@ -4,27 +4,27 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Jim.
+ * Created by Xheghun.
  */
 public class DataManagerTest {
     static DataManager sDataManager;
 
     @BeforeClass
-    public static void classSetUp() throws Exception {
+    public static void classSetUp() {
         sDataManager = DataManager.getInstance();
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         sDataManager.getNotes().clear();
-        sDataManager.initializeExampleNotes();
+        //sDataManager.initializeExampleNotes();
     }
 
     @Test
-    public void createNewNote() throws Exception {
+    public void createNewNote() {
         final CourseInfo course = sDataManager.getCourse("android_async");
         final String noteTitle = "Test note title";
         final String noteText = "This is the body text of my test note";
@@ -42,7 +42,7 @@ public class DataManagerTest {
     }
 
     @Test
-    public void findSimilarNotes() throws Exception {
+    public void findSimilarNotes() {
         final CourseInfo course = sDataManager.getCourse("android_async");
         final String noteTitle = "Test note title";
         final String noteText1 = "This is the body text of my test note";

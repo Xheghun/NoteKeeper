@@ -62,7 +62,7 @@ public class NoteUploader {
 
     private static void simulateLongRunningWork() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch(Exception ex) {}
     }
 

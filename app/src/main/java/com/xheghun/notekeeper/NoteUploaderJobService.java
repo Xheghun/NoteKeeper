@@ -6,36 +6,51 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 public class NoteUploaderJobService extends JobService {
-    public static final String EXTRA_DATA_URI = "com.xheghun.extras.DATA_URI";
-    private NoteUploader noteUploader;
+
+    public static final String EXTRA_DATA_URI = "com.xheghun.notekeeper.extras.DATA_URI";
+    private NoteUploader mNoteUploader;
 
     public NoteUploaderJobService() {
     }
 
     @Override
-    public boolean onStartJob(final JobParameters jobParameters) {
-        AsyncTask<JobParameters,Void,Void> task = new AsyncTask<JobParameters, Void, Void>() {
+    public boolean onStartJob(JobParameters params) {
+        AsyncTask<JobParameters, Void, Void> task = new AsyncTask<JobParameters, Void, Void>() {
             @Override
-            protected Void doInBackground(JobParameters... backgroundJobParameters) {
-                JobParameters jobParams = backgroundJobParameters[0];
+            protected Void doInBackground(JobParameters... backgroundParams) {
+                JobParameters jobParams = backgroundParams[0];
+
                 String stringDataUri = jobParams.getExtras().getString(EXTRA_DATA_URI);
                 Uri dataUri = Uri.parse(stringDataUri);
-                noteUploader.doUpload(dataUri);
+                mNoteUploader.doUpload(dataUri);
 
-                if (!noteUploader.isCanceled())
-                    jobFinished(jobParams,false);
+                if (!mNoteUploader.isCanceled())
+                    jobFinished(jobParams, false);
+
                 return null;
             }
         };
 
-        noteUploader = new NoteUploader(this);
-        task.execute(jobParameters);
+        mNoteUploader = new NoteUploader(this);
+        task.execute(params);
+
         return true;
     }
 
     @Override
-    public boolean onStopJob(JobParameters jobParameters) {
-        noteUploader.cancel();
+    public boolean onStopJob(JobParameters params) {
+        mNoteUploader.cancel();
         return true;
     }
+
 }
+
+
+
+
+
+
+
+
+
+

@@ -79,8 +79,8 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mTextCourse = (TextView) itemView.findViewById(R.id.text_course);
-            mTextTitle = (TextView) itemView.findViewById(R.id.text_title);
+            mTextCourse = itemView.findViewById(R.id.text_course);
+            mTextTitle = itemView.findViewById(R.id.text_title);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -92,6 +92,28 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
             });
         }
     }
+
+//    public class Decorate extends RecyclerView.ItemDecoration {
+//        @Override
+//        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+//            super.onDraw(c, parent, state);
+//        }
+//
+//        @Override
+//        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+//            //super.onDrawOver(c, parent, state);
+//            if (Mode.S)
+//        }
+//
+//        @Override
+//        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//            if (view = MY_VIEW_TYPE) {
+//                outRect.set(0,0,0,1);
+//            }else {
+//                outRect.setEmpty();
+//            }
+//        }
+//    }
 }
 
 

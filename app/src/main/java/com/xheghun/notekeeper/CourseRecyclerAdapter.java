@@ -1,7 +1,6 @@
 package com.xheghun.notekeeper;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by Jim.
+ * Created by Xheghun.
  */
 
 public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAdapter.ViewHolder> {
@@ -52,7 +51,7 @@ public class CourseRecyclerAdapter extends RecyclerView.Adapter<CourseRecyclerAd
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mTextCourse = (TextView) itemView.findViewById(R.id.text_course);
+            mTextCourse = itemView.findViewById(R.id.text_course);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

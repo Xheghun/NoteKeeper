@@ -20,7 +20,6 @@ import android.support.v4.app.NotificationCompat;
  * class to create notifications in a backward-compatible way.
  */
 public class NoteReminderNotification {
-    public static final String NOTE_SUMARY = "Review Note";
     /**
      * The unique identifier for this type of notification.
      */
@@ -30,10 +29,10 @@ public class NoteReminderNotification {
      * Shows the notification, or updates a previously shown notification of
      * this type, with the given parameters.
      * <p>
-     *
+     * TODO: Customize this method's arguments to present relevant content in
      * the notification.
      * <p>
-     *
+     * TODO: Customize the contents of this method to tweak the behavior and
      * presentation of note reminder notifications. Make
      * sure to follow the
      * <a href="https://developer.android.com/design/patterns/notifications.html">
@@ -42,37 +41,28 @@ public class NoteReminderNotification {
      * @see #cancel(Context)
      */
     public static void notify(final Context context,
-                              final String noteTitle,
-                              final String noteText,
-                              final int noteId) {
+                              final String noteTitle, final String noteText, int noteId) {
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
-
+        // TODO: Remove this if your notification has no relevant thumbnail.
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.note_icon);
-
-        Intent backupServiceIntent = new Intent(context,NoteBackupService.class);
-        backupServiceIntent.putExtra(NoteBackupService.EXTRA_COURSE_ID,NoteBackup.ALL_COURSES);
 
         Intent noteActivityIntent = new Intent(context, NoteActivity.class);
         noteActivityIntent.putExtra(NoteActivity.NOTE_ID, noteId);
+        Intent backupServiceIntent = new Intent(context, NoteBackupService.class);
+        backupServiceIntent.putExtra(NoteBackupService.EXTRA_COURSE_ID, NoteBackup.ALL_COURSES);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-
-                // Set appropriate defaults for the notification light, sound,
-                // and vibration.
                 .setDefaults(Notification.DEFAULT_ALL)
 
                 // Set required fields, including the small icon, the
                 // notification title, and text.
                 .setSmallIcon(R.drawable.ic_stat_note_reminder)
-                .setContentTitle(NOTE_SUMARY)
+                .setContentTitle("Review note")
                 .setContentText(noteText)
 
                 // All fields below this line are optional.
-
-                // Use a default priority (recognized on devices running Android
-                // 4.1 or later)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
                 // Provide a large icon, shown with the notification in the
@@ -80,20 +70,18 @@ public class NoteReminderNotification {
                 .setLargeIcon(picture)
 
                 // Set ticker text (preview) information for this notification.
-                .setTicker("Review Note")
+                .setTicker("Review note")
+
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(noteText)
                         .setBigContentTitle(noteTitle)
-                        .setSummaryText(NOTE_SUMARY))
-
-                // Show a number. This is useful when stacking notifications of
-                // a single type.
-
+                        .setSummaryText("Review note"))
 
                 // If this notification relates to a past or upcoming event, you
                 // should set the relevant time information using the setWhen
                 // method below. If this call is omitted, the notification's
                 // timestamp will by set to the time at which it was shown.
+                // TODO: Call setWhen if this notification relates to a past or
                 // upcoming event. The sole argument to this method should be
                 // the notification timestamp in milliseconds.
                 //.setWhen(...)
@@ -106,15 +94,19 @@ public class NoteReminderNotification {
                                 0,
                                 noteActivityIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT))
-                .addAction(0,
-                        "View all Notes",
+
+                .addAction(
+                        0,
+                        "View all notes",
                         PendingIntent.getActivity(
                                 context,
                                 0,
                                 new Intent(context, MainActivity.class),
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        ))
-                .addAction(0,"Backup Notes",
+                                PendingIntent.FLAG_UPDATE_CURRENT))
+
+                .addAction(
+                        0,
+                        "Backup notes",
                         PendingIntent.getService(
                                 context,
                                 0,
@@ -140,7 +132,7 @@ public class NoteReminderNotification {
 
     /**
      * Cancels any notifications of this type previously shown using
-     * {@link #notify(Context, String, String, int)}.
+     * {@link #notify(Context, String, int)}.
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context) {

@@ -35,8 +35,8 @@ public class NoteActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final int LOADER_NOTES = 0;
     public static final int LOADER_COURSES = 1;
-    private static final String NOTE_URI = "com.xheghun.notekeeper:NOTE_URI";
     private final String TAG = getClass().getSimpleName();
+    public static final String NOTE_URI = "com.xheghun.notekeeper.NOTE_URI";
     public static final String NOTE_ID = "com.xheghun.notekeeper.NOTE_ID";
     public static final String ORIGINAL_NOTE_COURSE_ID = "com.xheghun.notekeeper.ORIGINAL_NOTE_COURSE_ID";
     public static final String ORIGINAL_NOTE_TITLE = "com.xheghun.notekeeper.ORIGINAL_NOTE_TITLE";
@@ -61,6 +61,7 @@ public class NoteActivity extends AppCompatActivity
     private boolean mCoursesQueryFinished;
     private boolean mNotesQueryFinished;
     private Uri mNoteUri;
+    private ModuleStatusView mViewModuleStatus;
 
     @Override
     protected void onDestroy() {
@@ -76,16 +77,12 @@ public class NoteActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         mDbOpenHelper = new NoteKeeperOpenHelper(this);
-
         mSpinnerCourses = findViewById(R.id.spinner_courses);
-
-
         mAdapterCourses = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, null,
                 new String[]{CourseInfoEntry.COLUMN_COURSE_TITLE},
                 new int[]{android.R.id.text1}, 0);
         mAdapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerCourses.setAdapter(mAdapterCourses);
-
         getLoaderManager().initLoader(LOADER_COURSES, null, this);
 
         readDisplayStateValues();
@@ -103,6 +100,19 @@ public class NoteActivity extends AppCompatActivity
         if(!mIsNewNote)
             getLoaderManager().initLoader(LOADER_NOTES, null, this);
 
+        mViewModuleStatus = findViewById(R.id.module_status);
+        loadModuleStatusValues();
+    }
+
+    private void loadModuleStatusValues() {
+        // In real life we'd lookup the selected course's module statuses from the content provider
+        int totalNumberOfModules = 11;
+        int completedNumberOfModules = 7;
+        boolean[] moduleStatus = new boolean[totalNumberOfModules];
+        for (int moduleIndex = 0; moduleIndex < completedNumberOfModules; moduleIndex++)
+            moduleStatus[moduleIndex] = true;
+
+        mViewModuleStatus.setModuleStatus(moduleStatus);
     }
 
     private void loadCourseData() {
@@ -156,7 +166,7 @@ public class NoteActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         if(mIsCancelling) {
-            Log.i(TAG, "Cancelling note at position: " + mNoteId);
+//            Log.i(TAG, "Cancelling note at position: " + mNoteId);
             if(mIsNewNote) {
                 deleteNoteFromDatabase();
             } else {
@@ -165,7 +175,7 @@ public class NoteActivity extends AppCompatActivity
         } else {
             saveNote();
         }
-        Log.d(TAG, "onPause");
+        Log.d(TAG, "************** onPause **************");
     }
 
     private void deleteNoteFromDatabase() {
@@ -193,7 +203,7 @@ public class NoteActivity extends AppCompatActivity
         outState.putString(ORIGINAL_NOTE_TITLE, mOriginalNoteTitle);
         outState.putString(ORIGINAL_NOTE_TEXT, mOriginalNoteText);
 
-        outState.putString(NOTE_URI,mNoteUri.toString());
+        outState.putString(NOTE_URI, mNoteUri.toString());
     }
 
     private void saveNote() {
@@ -232,7 +242,7 @@ public class NoteActivity extends AppCompatActivity
         mTextNoteTitle.setText(noteTitle);
         mTextNoteText.setText(noteText);
 
-        CourseEventBroadcastHelper.sendEventBroadcast(this,courseId,"editing note....");
+        CourseEventBroadcastHelper.sendEventBroadcast(this, courseId, "Editing Note");
     }
 
     private int getIndexOfCourseId(String courseId) {
@@ -260,14 +270,14 @@ public class NoteActivity extends AppCompatActivity
             createNewNote();
         }
 
-        Log.i(TAG, "mNoteId: " + mNoteId);
+//        Log.i(TAG, "mNoteId: " + mNoteId);
 //        mNote = DataManager.getInstance().getNotes().get(mNoteId);
 
     }
 
     private void createNewNote() {
-        AsyncTask<ContentValues,Integer,Uri> task = new AsyncTask<ContentValues, Integer, Uri>() {
-           private ProgressBar mProgressBar;
+        AsyncTask<ContentValues, Integer, Uri> task = new AsyncTask<ContentValues, Integer, Uri>() {
+            private ProgressBar mProgressBar;
 
             @Override
             protected void onPreExecute() {
@@ -277,14 +287,15 @@ public class NoteActivity extends AppCompatActivity
             }
 
             @Override
-            protected Uri doInBackground(ContentValues... contentValues) {
-                Log.d(TAG,"doInBackground - thread: "+Thread.currentThread().getId());
-                ContentValues insertValues = contentValues[0];
+            protected Uri doInBackground(ContentValues... params) {
+                Log.d(TAG, "doInBackground - thread: " + Thread.currentThread().getId());
+                ContentValues insertValues = params[0];
                 Uri rowUri = getContentResolver().insert(Notes.CONTENT_URI, insertValues);
-                simulateLongRunningWork();//simulate slow data work
-                publishProgress(2);
-                simulateLongRunningWork();
-                publishProgress(3);
+                //simulateLongRunningWork(); // simulate slow database work
+                //publishProgress(2);
+
+                //simulateLongRunningWork(); // simulate slow work with data
+                //publishProgress(3);
                 return rowUri;
             }
 
@@ -296,9 +307,9 @@ public class NoteActivity extends AppCompatActivity
 
             @Override
             protected void onPostExecute(Uri uri) {
-                Log.d(TAG,"onPostExecute - thread: "+Thread.currentThread().getId());
+                Log.d(TAG, "onPostExecute - thread: " + Thread.currentThread().getId());
                 mNoteUri = uri;
-                displaySnackBar(mNoteUri.toString());
+                //displaySnackbar(mNoteUri.toString());
                 mProgressBar.setVisibility(View.GONE);
             }
         };
@@ -308,21 +319,20 @@ public class NoteActivity extends AppCompatActivity
         values.put(Notes.COLUMN_NOTE_TITLE, "");
         values.put(Notes.COLUMN_NOTE_TEXT, "");
 
-       Log.d(TAG,"Call to execute - thread: "+ Thread.currentThread().getId());
-       task.execute(values);
+        Log.d(TAG, "Call to execute - thread: " + Thread.currentThread().getId());
+        task.execute(values);
+    }
+
+    private void displaySnackbar(String message) {
+        View view = findViewById(R.id.spinner_courses);
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
     private void simulateLongRunningWork() {
         try {
             Thread.sleep(2000);
-        }catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
         }
-    }
-
-    private void displaySnackBar(String string) {
-        View view = findViewById(R.id.activity_note);
-        Snackbar.make(view,string,Snackbar.LENGTH_SHORT);
     }
 
     @Override
@@ -334,9 +344,6 @@ public class NoteActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -359,20 +366,20 @@ public class NoteActivity extends AppCompatActivity
         String noteTitle = mTextNoteTitle.getText().toString();
         String noteText = mTextNoteText.getText().toString();
         int noteId = (int) ContentUris.parseId(mNoteUri);
-        Intent intent = new Intent(this,NoteReminderReceiver.class);
+
+        Intent intent = new Intent(this, NoteReminderReceiver.class);
         intent.putExtra(NoteReminderReceiver.EXTRA_NOTE_TITLE, noteTitle);
         intent.putExtra(NoteReminderReceiver.EXTRA_NOTE_TEXT, noteText);
         intent.putExtra(NoteReminderReceiver.EXTRA_NOTE_ID, noteId);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        AlarmManager alarmManager =(AlarmManager) getSystemService(ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        Long currentTimeInMilliseconds = SystemClock.elapsedRealtime();
+        long currentTimeInMilliseconds = SystemClock.elapsedRealtime();
         long ONE_HOUR = 60 * 60 * 1000;
-        long TEN = 10 * 1000;
-        long alarmTime = currentTimeInMilliseconds + TEN;
-        assert alarmManager != null;
+        long TEN_SECONDS = 10 * 1000;
+        long alarmTime = currentTimeInMilliseconds + TEN_SECONDS;
         alarmManager.set(AlarmManager.ELAPSED_REALTIME, alarmTime, pendingIntent);
     }
 
@@ -478,3 +485,15 @@ public class NoteActivity extends AppCompatActivity
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

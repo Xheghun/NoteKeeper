@@ -23,6 +23,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LoaderManager.LoaderCallbacks<Cursor> {
     public static final int LOADER_NOTES = 0;
-    public static final int NOTE_UPLLOADER_JOB_ID = 1;
+    private static final int NOTE_UPLOADER_JOB_ID = 1;
     private NoteRecyclerAdapter mNoteRecyclerAdapter;
     private RecyclerView mRecyclerItems;
     private LinearLayoutManager mNotesLayoutManager;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        enableSrictMode();
+        enableStrictMode();
 
         mDbOpenHelper = new NoteKeeperOpenHelper(this);
 
@@ -85,13 +86,14 @@ public class MainActivity extends AppCompatActivity
         initializeDisplayContent();
     }
 
-    private void enableSrictMode() {
+    private void enableStrictMode() {
         if (BuildConfig.DEBUG) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                     .detectAll()
                     .penaltyLog()
                     .build();
             StrictMode.setThreadPolicy(policy);
+
         }
     }
 
@@ -107,18 +109,19 @@ public class MainActivity extends AppCompatActivity
         getLoaderManager().restartLoader(LOADER_NOTES, null, this);
         updateNavHeader();
 
-        openDrawer();
+//        openDrawer();
     }
 
     private void openDrawer() {
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
                 drawer.openDrawer(Gravity.START);
             }
-        });
+        }, 1000);
+
 
     }
 
@@ -153,11 +156,14 @@ public class MainActivity extends AppCompatActivity
         DataManager.loadFromDatabase(mDbOpenHelper);
         mRecyclerItems = findViewById(R.id.list_items);
         mNotesLayoutManager = new LinearLayoutManager(this);
-        mCoursesLayoutManager = new GridLayoutManager(this, getResources().
-                getInteger(R.integer.course_grid_span));
+        mCoursesLayoutManager = new GridLayoutManager(this,
+                getResources().getInteger(R.integer.course_grid_span));
 
 
         mNoteRecyclerAdapter = new NoteRecyclerAdapter(this, null);
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+        itemDecoration.setDrawable(getResources().getDrawable(R.drawable.horizontal_line));
+        mRecyclerItems.addItemDecoration(itemDecoration);
 
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
         mCourseRecyclerAdapter = new CourseRecyclerAdapter(this, courses);
@@ -203,18 +209,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
-        }else if(id == R.id.action_backup_notes) {
+        } else if (id == R.id.action_backup_notes) {
             backupNotes();
-        }else if (id == R.id.action_upload_notes) {
+        } else if (id == R.id.action_upload_notes) {
             scheduleNoteUpload();
         }
 
@@ -223,22 +225,21 @@ public class MainActivity extends AppCompatActivity
 
     private void scheduleNoteUpload() {
         PersistableBundle extras = new PersistableBundle();
-        extras.putString(NoteUploaderJobService.EXTRA_DATA_URI,Notes.CONTENT_URI.toString());
+        extras.putString(NoteUploaderJobService.EXTRA_DATA_URI, Notes.CONTENT_URI.toString());
 
-
-        ComponentName componentName = new ComponentName(this,NoteUploaderJobService.class);
-        JobInfo jobInfo = new JobInfo.Builder(NOTE_UPLLOADER_JOB_ID,componentName)
+        ComponentName componentName = new ComponentName(this, NoteUploaderJobService.class);
+        JobInfo jobInfo = new JobInfo.Builder(NOTE_UPLOADER_JOB_ID, componentName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setExtras(extras)
                 .build();
 
-        JobScheduler jobScheduler =(JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(jobInfo);
     }
 
     private void backupNotes() {
-        Intent intent = new Intent(this,NoteBackupService.class);
-        intent.putExtra(NoteBackupService.EXTRA_COURSE_ID,NoteBackup.ALL_COURSES);
+        Intent intent = new Intent(this, NoteBackupService.class);
+        intent.putExtra(NoteBackupService.EXTRA_COURSE_ID, NoteBackup.ALL_COURSES);
         startService(intent);
     }
 
@@ -307,6 +308,5 @@ public class MainActivity extends AppCompatActivity
         if (loader.getId() == LOADER_NOTES) {
             mNoteRecyclerAdapter.changeCursor(null);
         }
-
     }
 }

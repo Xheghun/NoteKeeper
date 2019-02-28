@@ -52,8 +52,7 @@ public class NoteBackup {
     private static void simulateLongRunningWork() {
         try {
             Thread.sleep(1000);
-        } catch(Exception ex) {
-            System.out.println();
+        } catch (Exception ex) {
         }
     }
 
