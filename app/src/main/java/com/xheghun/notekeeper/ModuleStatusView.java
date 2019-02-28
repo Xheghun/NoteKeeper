@@ -21,16 +21,16 @@ import android.view.accessibility.AccessibilityEvent;
 import java.util.List;
 
 /**
- * TODO: document your custom view class.
+ * document your custom view class.
  */
 public class ModuleStatusView extends View {
     private static final int EDIT_MODE_MODULE_COUNT = 7;
     private static final int INVALID_INDEX = -1;
     private static final int SHAPE_CIRCLE = 0;
     private static final float DEFAULT_OUTLINE_WIDTH_DP = 2f;
-    private String mExampleString; // TODO: use a default from R.string...
-    private int mExampleColor = Color.RED; // TODO: use a default from R.color...
-    private float mExampleDimension = 0; // TODO: use a default from R.dimen...
+    private String mExampleString; // use a default from R.string...
+    private int mExampleColor = Color.RED; //  use a default from R.color...
+    private float mExampleDimension = 0; // use a default from R.dimen...
     private Drawable mExampleDrawable;
     private float mSpacing;
     private float mShapeSize;
