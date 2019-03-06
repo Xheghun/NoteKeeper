@@ -106,10 +106,12 @@
     <string name="app_user_notekeeper_app" translatable="false">app\.user@notekeeper\.app</string>
     <string name="notekeeper" translatable="false">NoteKeeper</string>
     <string name="set_reminder">Set reminder</string>
-    <string name="send_as_email">Send as email</string>
+    <string name="share_note">Share Note</string>
     <string name="next">Next</string>
     <string name="cancel">Cancel</string>
     <string name="textview">TextView</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="nothing_to_display">Nothing to Display</string>
 </resources>
 
 

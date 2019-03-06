@@ -1,11 +1,11 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/primaryLightColor</item>
         <!--<item name="android:textSize">30sp</item>-->
         <!--<item name="editTextStyle">@style/WeirdEditText</item>-->
     </style>
@@ -15,21 +15,27 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="WeirdEditText" parent="Widget.AppCompat.EditText">
+    <style name="WeirdEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="android:textColor">@android:color/holo_green_dark</item>
         <item name="android:textColorHint">@android:color/holo_red_dark</item>
     </style>
     <style name="CourseTitle" parent="@android:style/TextAppearance.Material.Medium">
-        <item name="android:textColor">@color/pluralsight_orange</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primaryDarkColor</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
 
-    <style name="AddFab" parent="@style/Widget.Design.FloatingActionButton">
+    <style name="add_fab" parent="@style/Widget.MaterialComponents.FloatingActionButton">
         <item name="srcCompat">@drawable/ic_add_24dp</item>
         <item name="android:tint">@android:color/white</item>
+    </style>
+
+    <style name="note_font" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:colorAccent">#ffffff</item>
+        <item name="android:colorBackground">#ffffff</item>
     </style>
 </resources>

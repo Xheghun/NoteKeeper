@@ -8,9 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v4.widget.ExploreByTouchHelper;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -19,6 +16,10 @@ import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 
 import java.util.List;
+
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import androidx.customview.widget.ExploreByTouchHelper;
 
 /**
  * document your custom view class.
@@ -104,7 +105,7 @@ public class ModuleStatusView extends View {
         mPaintOutline.setStrokeWidth(mOutlineWidth);
         mPaintOutline.setColor(mOutlineColor);
 
-        mFillColor = getContext().getResources().getColor(R.color.pluralsight_orange);
+        mFillColor = getContext().getResources().getColor(R.color.primaryDarkColor);
         mPaintFill = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintFill.setStyle(Paint.Style.FILL);
         mPaintFill.setColor(mFillColor);

@@ -3,14 +3,16 @@ package com.xheghun.notekeeper;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.xheghun.notekeeper.NoteKeeperDatabaseContract.CourseInfoEntry;
 import com.xheghun.notekeeper.NoteKeeperDatabaseContract.NoteInfoEntry;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Xheghun.
@@ -58,8 +60,8 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        String course = mCursor.getString(mCoursePos);
-        String noteTitle = mCursor.getString(mNoteTitlePos);
+        String course = mCursor.getString(mCoursePos).trim();
+        String noteTitle = mCursor.getString(mNoteTitlePos).trim();
         int id = mCursor.getInt(mIdPos);
 
         holder.mTextCourse.setText(course);
@@ -88,6 +90,13 @@ public class NoteRecyclerAdapter extends RecyclerView.Adapter<NoteRecyclerAdapte
                     Intent intent = new Intent(mContext, NoteActivity.class);
                     intent.putExtra(NoteActivity.NOTE_ID, mId);
                     mContext.startActivity(intent);
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Snackbar.make(view, mTextTitle.getText().toString().trim(), Snackbar.LENGTH_SHORT).show();
+                    return true;
                 }
             });
         }

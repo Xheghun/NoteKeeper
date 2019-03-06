@@ -29,7 +29,7 @@
     <string name="pref_title_favorite_social">Red social favorita</string>
     <string name="create_new_note">Crear nueva nota</string>
     <string name="set_reminder">establecer recordatorio</string>
-    <string name="send_as_email">enviar como correo</string>
+    <string name="share_note">enviar como correo</string>
     <string name="next">siguiente</string>
     <string name="cancel">Cancelar</string>
 </resources>

@@ -16,28 +16,28 @@ import android.os.Looper;
 import android.os.PersistableBundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.xheghun.notekeeper.NoteKeeperDatabaseContract.NoteInfoEntry;
 import com.xheghun.notekeeper.NoteKeeperProviderContract.Notes;
 
 import java.util.List;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -48,8 +48,10 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mRecyclerItems;
     private LinearLayoutManager mNotesLayoutManager;
     private CourseRecyclerAdapter mCourseRecyclerAdapter;
-    private GridLayoutManager mCoursesLayoutManager;
+    private LinearLayoutManager mCoursesLayoutManager;
     private NoteKeeperOpenHelper mDbOpenHelper;
+    private TextView mNoNote;
+    private int notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(MainActivity.this, NoteActivity.class));
             }
         });
+
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         PreferenceManager.setDefaultValues(this, R.xml.pref_notification, false);
@@ -156,15 +159,21 @@ public class MainActivity extends AppCompatActivity
         DataManager.loadFromDatabase(mDbOpenHelper);
         mRecyclerItems = findViewById(R.id.list_items);
         mNotesLayoutManager = new LinearLayoutManager(this);
-        mCoursesLayoutManager = new GridLayoutManager(this,
-                getResources().getInteger(R.integer.course_grid_span));
-
+        mCoursesLayoutManager = new LinearLayoutManager(this);
 
         mNoteRecyclerAdapter = new NoteRecyclerAdapter(this, null);
+
         DividerItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         itemDecoration.setDrawable(getResources().getDrawable(R.drawable.horizontal_line));
         mRecyclerItems.addItemDecoration(itemDecoration);
+        notes = mNoteRecyclerAdapter.getItemCount();
 
+        mNoNote = findViewById(R.id.empty_list);
+        if (notes < 1) {
+            mNoNote.setVisibility(View.VISIBLE);
+        } else {
+            mNoNote.setVisibility(View.INVISIBLE);
+        }
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
         mCourseRecyclerAdapter = new CourseRecyclerAdapter(this, courses);
 
@@ -253,6 +262,7 @@ public class MainActivity extends AppCompatActivity
             displayNotes();
         } else if (id == R.id.nav_courses) {
             displayCourses();
+            mNoNote.setVisibility(View.INVISIBLE);
         } else if (id == R.id.nav_share) {
 //            handleSelection(R.string.nav_share_message);
             handleShare();

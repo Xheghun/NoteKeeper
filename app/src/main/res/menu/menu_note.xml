@@ -16,9 +16,9 @@
         android:visible="false"
         app:showAsAction="ifRoom|withText" />
     <item
-        android:id="@+id/action_send_mail"
+        android:id="@+id/action_share_note"
         android:orderInCategory="102"
-        android:title="@string/send_as_email"
+        android:title="@string/share_note"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_set_reminder"
@@ -26,4 +26,9 @@
         android:icon="@drawable/ic_alarm_white"
         android:orderInCategory="103"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_delete_note"
+        android:icon="@drawable/ic_delete_forever"
+        android:orderInCategory="104"
+        android:title="@string/delete_note" />
 </menu>

@@ -4,11 +4,13 @@
     <item
         android:id="@+id/action_backup_notes"
         android:orderInCategory="100"
-        android:title="Backup notes" />
+        android:title="Backup notes"
+        android:visible="false" />
     <item
         android:id="@+id/action_upload_notes"
         android:orderInCategory="101"
-        android:title="Upload notes" />
+        android:title="Upload notes"
+        android:visible="false" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="102"

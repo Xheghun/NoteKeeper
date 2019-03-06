@@ -8,8 +8,8 @@
             android:title="Notes" />
         <item
             android:id="@+id/nav_courses"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Courses" />
+            android:icon="@drawable/ic_tag"
+            android:title="Tags" />
     </group>
 
     <item android:title="Communicate">

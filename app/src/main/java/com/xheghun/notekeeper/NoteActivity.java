@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -14,22 +15,24 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.xheghun.notekeeper.NoteKeeperDatabaseContract.CourseInfoEntry;
 import com.xheghun.notekeeper.NoteKeeperDatabaseContract.NoteInfoEntry;
 import com.xheghun.notekeeper.NoteKeeperProviderContract.Courses;
 import com.xheghun.notekeeper.NoteKeeperProviderContract.Notes;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class NoteActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -42,6 +45,7 @@ public class NoteActivity extends AppCompatActivity
     public static final String ORIGINAL_NOTE_TITLE = "com.xheghun.notekeeper.ORIGINAL_NOTE_TITLE";
     public static final String ORIGINAL_NOTE_TEXT = "com.xheghun.notekeeper.ORIGINAL_NOTE_TEXT";
     public static final int ID_NOT_SET = -1;
+
     private NoteInfo mNote = new NoteInfo(DataManager.getInstance().getCourses().get(0), "", "");
     private boolean mIsNewNote;
     private Spinner mSpinnerCourses;
@@ -61,13 +65,13 @@ public class NoteActivity extends AppCompatActivity
     private boolean mCoursesQueryFinished;
     private boolean mNotesQueryFinished;
     private Uri mNoteUri;
-    private ModuleStatusView mViewModuleStatus;
 
     @Override
     protected void onDestroy() {
         mDbOpenHelper.close();
         super.onDestroy();
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +82,13 @@ public class NoteActivity extends AppCompatActivity
 
         mDbOpenHelper = new NoteKeeperOpenHelper(this);
         mSpinnerCourses = findViewById(R.id.spinner_courses);
-        mAdapterCourses = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, null,
+
+        mAdapterCourses = new SimpleCursorAdapter(this, R.layout.spinner_text_item_style, null,
                 new String[]{CourseInfoEntry.COLUMN_COURSE_TITLE},
                 new int[]{android.R.id.text1}, 0);
-        mAdapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mAdapterCourses.setDropDownViewResource(R.layout.spinner_text_style);
         mSpinnerCourses.setAdapter(mAdapterCourses);
+
         getLoaderManager().initLoader(LOADER_COURSES, null, this);
 
         readDisplayStateValues();
@@ -99,20 +105,6 @@ public class NoteActivity extends AppCompatActivity
 
         if(!mIsNewNote)
             getLoaderManager().initLoader(LOADER_NOTES, null, this);
-
-        mViewModuleStatus = findViewById(R.id.module_status);
-        loadModuleStatusValues();
-    }
-
-    private void loadModuleStatusValues() {
-        // In real life we'd lookup the selected course's module statuses from the content provider
-        int totalNumberOfModules = 11;
-        int completedNumberOfModules = 7;
-        boolean[] moduleStatus = new boolean[totalNumberOfModules];
-        for (int moduleIndex = 0; moduleIndex < completedNumberOfModules; moduleIndex++)
-            moduleStatus[moduleIndex] = true;
-
-        mViewModuleStatus.setModuleStatus(moduleStatus);
     }
 
     private void loadCourseData() {
@@ -277,13 +269,11 @@ public class NoteActivity extends AppCompatActivity
 
     private void createNewNote() {
         AsyncTask<ContentValues, Integer, Uri> task = new AsyncTask<ContentValues, Integer, Uri>() {
-            private ProgressBar mProgressBar;
+
 
             @Override
             protected void onPreExecute() {
-                mProgressBar = findViewById(R.id.progress_bar);
-                mProgressBar.setVisibility(View.VISIBLE);
-                mProgressBar.setProgress(1);
+
             }
 
             @Override
@@ -302,7 +292,6 @@ public class NoteActivity extends AppCompatActivity
             @Override
             protected void onProgressUpdate(Integer... values) {
                 int progressValue = values[0];
-                mProgressBar.setProgress(progressValue);
             }
 
             @Override
@@ -310,7 +299,6 @@ public class NoteActivity extends AppCompatActivity
                 Log.d(TAG, "onPostExecute - thread: " + Thread.currentThread().getId());
                 mNoteUri = uri;
                 //displaySnackbar(mNoteUri.toString());
-                mProgressBar.setVisibility(View.GONE);
             }
         };
 
@@ -347,8 +335,8 @@ public class NoteActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_send_mail) {
-            sendEmail();
+        if (id == R.id.action_share_note) {
+            shareNote();
             return true;
         } else if (id == R.id.action_cancel) {
             mIsCancelling = true;
@@ -357,9 +345,32 @@ public class NoteActivity extends AppCompatActivity
             moveNext();
         } else if (id == R.id.action_set_reminder) {
             showReminderNotification();
+        } else if (id == R.id.action_delete_note) {
+            confirmDelete();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void confirmDelete() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Confirm Delete")
+                .setMessage("This note will be permanently deleted");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteNoteFromDatabase();
+                startActivity(new Intent(NoteActivity.this, MainActivity.class));
+                Toast.makeText(NoteActivity.this, "Note Deleted", Toast.LENGTH_SHORT).show();
+            }
+        })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .create().show();
     }
 
     private void showReminderNotification() {
@@ -402,14 +413,11 @@ public class NoteActivity extends AppCompatActivity
         invalidateOptionsMenu();
     }
 
-    private void sendEmail() {
-        CourseInfo course = (CourseInfo) mSpinnerCourses.getSelectedItem();
-        String subject = mTextNoteTitle.getText().toString();
-        String text = "Checkout what I learned in the Pluralsight course \"" +
-                course.getTitle() +"\"\n" + mTextNoteText.getText().toString();
+    private void shareNote() {
+        String text = "Title: " + mTextNoteTitle.getText().toString().trim() + "\n\n";
+        text += "Body \n" + mTextNoteText.getText().toString();
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("message/rfc2822");
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, text);
         startActivity(intent);
     }
@@ -485,7 +493,6 @@ public class NoteActivity extends AppCompatActivity
         }
     }
 }
-
 
 
 
